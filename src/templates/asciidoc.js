@@ -5,6 +5,7 @@ export default function({ data: { asciidoc } }) {
   return (
     <main>
       <h1>{asciidoc.document.title}</h1>
+      <h2>Written by {asciidoc.parent.frontMatter.author}</h2>
       <div dangerouslySetInnerHTML={{ __html: asciidoc.html }} />
     </main>
   )
@@ -15,6 +16,13 @@ export const pageQuery = graphql`
     asciidoc(id: { eq: $id }) {
       document {
         title
+      }
+      parent {
+        ... on File {
+          frontMatter {
+            author
+          }
+        }
       }
       html
     }

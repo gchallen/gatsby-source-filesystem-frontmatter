@@ -3,3 +3,4 @@ package.json
 package-lock.json
 public
 plugins/gatsby-source-filesystem/*.js
+plugins/gatsby-source-filesystem/src/__tests__/fixtures/file-with-frontmatter.json

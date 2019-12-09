@@ -6,6 +6,8 @@ const prettyBytes = require(`pretty-bytes`)
 const md5File = require(`bluebird`).promisify(require(`md5-file`))
 const { createContentDigest, slash } = require(`gatsby-core-utils`)
 
+const grayMatter = require("gray-matter")
+
 exports.createFileNode = async (
   pathToFile,
   createNodeId,
@@ -24,6 +26,7 @@ exports.createFileNode = async (
 
   const stats = await fs.stat(slashedFile.absolutePath)
   let internal
+  let frontMatter = {}
   if (stats.isDirectory()) {
     const contentDigest = createContentDigest({
       stats: stats,
@@ -43,35 +46,44 @@ exports.createFileNode = async (
       mediaType: mediaType ? mediaType : `application/octet-stream`,
       description: `File "${path.relative(process.cwd(), slashed)}"`,
     }
+    if (pluginOptions.frontMatter === true) {
+      const contents = await fs.readFile(slashedFile.absolutePath)
+      const matter = grayMatter(contents)
+      internal.content = matter.content
+      frontMatter = matter.data
+    }
   }
 
   // Stringify date objects.
-  return JSON.parse(
-    JSON.stringify({
-      // Don't actually make the File id the absolute path as otherwise
-      // people will use the id for that and ids shouldn't be treated as
-      // useful information.
-      id: createNodeId(pathToFile),
-      children: [],
-      parent: null,
-      internal,
-      sourceInstanceName: pluginOptions.name || `__PROGRAMMATIC__`,
-      absolutePath: slashedFile.absolutePath,
-      relativePath: slash(
-        path.relative(
-          pluginOptions.path || process.cwd(),
-          slashedFile.absolutePath
-        )
-      ),
-      extension: slashedFile.ext.slice(1).toLowerCase(),
-      size: stats.size,
-      prettySize: prettyBytes(stats.size),
-      modifiedTime: stats.mtime,
-      accessTime: stats.atime,
-      changeTime: stats.ctime,
-      birthTime: stats.birthtime,
-      ...slashedFile,
-      ...stats,
-    })
+  return Object.assign(
+    JSON.parse(
+      JSON.stringify({
+        // Don't actually make the File id the absolute path as otherwise
+        // people will use the id for that and ids shouldn't be treated as
+        // useful information.
+        id: createNodeId(pathToFile),
+        children: [],
+        parent: null,
+        internal,
+        sourceInstanceName: pluginOptions.name || `__PROGRAMMATIC__`,
+        absolutePath: slashedFile.absolutePath,
+        relativePath: slash(
+          path.relative(
+            pluginOptions.path || process.cwd(),
+            slashedFile.absolutePath
+          )
+        ),
+        extension: slashedFile.ext.slice(1).toLowerCase(),
+        size: stats.size,
+        prettySize: prettyBytes(stats.size),
+        modifiedTime: stats.mtime,
+        accessTime: stats.atime,
+        changeTime: stats.ctime,
+        birthTime: stats.birthtime,
+        ...slashedFile,
+        ...stats,
+      })
+    ),
+    pluginOptions.frontMatter === true ? { frontMatter } : {}
   )
 }

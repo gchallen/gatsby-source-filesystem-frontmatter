@@ -1,16 +1,13 @@
 {
   "private": true,
   "scripts": {
+    "start": "concurrently -n gatsby,babel --handle-input \"nodemon\" \"cd plugins/gatsby-source-filesystem && npm run watch\"",
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "plugin:build": "cd plugins/gatsby-source-filesystem && babel src --out-dir . --ignore **/__tests__",
-    "plugin:prepare": "cd plugins/gatsby-source-filesystem && cross-env NODE_ENV=production npm run build",
-    "plugin:watch": "cd plugins/gatsby-source-filesystem && babel -w src --out-dir . --ignore **/__tests__",
-    "plugin:test": "cd plugins/gatsby-source-filesystem && jest"
+    "test": "cd plugins/gatsby-source-filesystem && jest"
   },
   "dependencies": {
     "gatsby": "^2.18.4",
@@ -19,12 +16,19 @@
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.4",
-    "@babel/core": "^7.7.4",
-    "babel-preset-gatsby-package": "^0.2.12",
-    "cross-env": "^5.2.1",
+    "concurrently": "^5.0.0",
     "gatsby-cli": "^2.8.16",
     "jest": "^24.9.0",
+    "nodemon": "^2.0.1",
     "prettier": "^1.19.1"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "package.json",
+      "package-lock.json",
+      "gatsby-config.js",
+      "gatsby-node.js"
+    ],
+    "exec": "gatsby develop"
   }
 }

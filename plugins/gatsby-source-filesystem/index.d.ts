@@ -93,6 +93,7 @@ export interface FileSystemNode extends Node {
   mtimeMs: number
   size: number
   uid: number
+  frontMatter?: object
 }
 
 export interface FileSystemConfig {
@@ -107,4 +108,5 @@ interface FileSystemOptions {
   name: string
   path: string
   ignore?: string[]
+  frontMatter?: boolean
 }

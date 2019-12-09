@@ -1,7 +1,11 @@
 const fs = require(`fs-extra`)
 
 function loadNodeContent(fileNode) {
-  return fs.readFile(fileNode.absolutePath, `utf-8`)
+  try {
+    return fileNode.internal.content
+  } catch (err) {
+    return fs.readFile(fileNode.absolutePath, `utf-8`)
+  }
 }
 
 exports.createFilePath = require(`./create-file-path`)
