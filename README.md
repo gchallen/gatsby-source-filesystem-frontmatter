@@ -66,3 +66,26 @@ You can query attributes defined in its front matter like this:
   }
 }
 ```
+
+Or, if you are using a page query to get Asciidoc content, for example, your
+query will look like this:
+
+```js
+export const pageQuery = graphql`
+  query($id: String!) {
+    asciidoc(id: { eq: $id }) {
+      document {
+        title
+      }
+      parent {
+        ... on File {
+          frontMatter {
+            author
+          }
+        }
+      }
+      html
+    }
+  }
+`
+```
