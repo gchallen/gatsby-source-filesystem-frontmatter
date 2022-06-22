@@ -16,7 +16,7 @@
     "file-type": "^12.4.0",
     "fs-extra": "^8.1.0",
     "gatsby-core-utils": "^1.0.22",
-    "got": "^7.1.0",
+    "got": "^11.8.5",
     "gray-matter": "^4.0.2",
     "md5-file": "^3.2.3",
     "mime": "^2.4.4",
