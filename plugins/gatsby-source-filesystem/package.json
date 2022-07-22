@@ -13,7 +13,7 @@
     "better-queue": "^3.8.10",
     "bluebird": "^3.7.1",
     "chokidar": "3.3.0",
-    "file-type": "^12.4.0",
+    "file-type": "^16.5.4",
     "fs-extra": "^8.1.0",
     "gatsby-core-utils": "^1.0.22",
     "got": "^7.1.0",
